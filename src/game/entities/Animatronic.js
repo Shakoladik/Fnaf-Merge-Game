@@ -127,7 +127,6 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
         super(scene.matter.world, x, y, name, 0, {
             vertices: adjustedColliderPoints,
             isStatic: true,
-            //label: 'Animatronic Collider'
         });
 
         // Ensure the sprite is centered correctly
