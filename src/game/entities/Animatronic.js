@@ -127,7 +127,7 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
         // Create the Animatronic with custom polygon collider
         super(scene.matter.world, x, y, name, 0, {
             vertices: colliderPoints,
-            isStatic: true,
+            isStatic: false,
         });
 
         // Ensure the sprite is centered correctly

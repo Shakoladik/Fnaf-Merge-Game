@@ -42,6 +42,7 @@ export default class Preloader extends Phaser.Scene {
     this.load.image(AnimatronicsNames.MANGLE, `images/heads/${AnimatronicsNames.MANGLE}.png`);
     this.load.image(AnimatronicsNames.GOLDEN_FREDDY, `images/heads/${AnimatronicsNames.GOLDEN_FREDDY}.png`);
     this.load.image(AnimatronicsNames.PUPPET, `images/heads/${AnimatronicsNames.PUPPET}.png`);
+    this.load.image('plank', 'images/other/plank.png')
   }
 
   create() {
