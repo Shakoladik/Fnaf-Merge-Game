@@ -30,19 +30,55 @@ export default class Preloader extends Phaser.Scene {
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath('assets');
 
-    this.load.image(AnimatronicsNames.ENDO, `images/heads/${AnimatronicsNames.ENDO}.png`);
-    this.load.image(AnimatronicsNames.BB, `images/heads/${AnimatronicsNames.BB}.png`);
-    this.load.image(AnimatronicsNames.BONNIE, `images/heads/${AnimatronicsNames.BONNIE}.png`);
-    this.load.image(AnimatronicsNames.TOY_BONNIE, `images/heads/${AnimatronicsNames.TOY_BONNIE}.png`);
-    this.load.image(AnimatronicsNames.CHIKA, `images/heads/${AnimatronicsNames.CHIKA}.png`);
-    this.load.image(AnimatronicsNames.TOY_CHIKA, `images/heads/${AnimatronicsNames.TOY_CHIKA}.png`);
-    this.load.image(AnimatronicsNames.FREDDY, `images/heads/${AnimatronicsNames.FREDDY}.png`);
-    this.load.image(AnimatronicsNames.TOY_FREDDY, `images/heads/${AnimatronicsNames.TOY_FREDDY}.png`);
-    this.load.image(AnimatronicsNames.FOXY, `images/heads/${AnimatronicsNames.FOXY}.png`);
-    this.load.image(AnimatronicsNames.MANGLE, `images/heads/${AnimatronicsNames.MANGLE}.png`);
-    this.load.image(AnimatronicsNames.GOLDEN_FREDDY, `images/heads/${AnimatronicsNames.GOLDEN_FREDDY}.png`);
-    this.load.image(AnimatronicsNames.PUPPET, `images/heads/${AnimatronicsNames.PUPPET}.png`);
-    this.load.image('plank', 'images/other/plank.png')
+    this.load.image(
+      AnimatronicsNames.ENDO,
+      `images/heads/${AnimatronicsNames.ENDO}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.BB,
+      `images/heads/${AnimatronicsNames.BB}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.BONNIE,
+      `images/heads/${AnimatronicsNames.BONNIE}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.TOY_BONNIE,
+      `images/heads/${AnimatronicsNames.TOY_BONNIE}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.CHIKA,
+      `images/heads/${AnimatronicsNames.CHIKA}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.TOY_CHIKA,
+      `images/heads/${AnimatronicsNames.TOY_CHIKA}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.FREDDY,
+      `images/heads/${AnimatronicsNames.FREDDY}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.TOY_FREDDY,
+      `images/heads/${AnimatronicsNames.TOY_FREDDY}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.FOXY,
+      `images/heads/${AnimatronicsNames.FOXY}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.MANGLE,
+      `images/heads/${AnimatronicsNames.MANGLE}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.GOLDEN_FREDDY,
+      `images/heads/${AnimatronicsNames.GOLDEN_FREDDY}.png`,
+    );
+    this.load.image(
+      AnimatronicsNames.PUPPET,
+      `images/heads/${AnimatronicsNames.PUPPET}.png`,
+    );
+    this.load.image('plank', 'images/other/plank.png');
   }
 
   create() {
