@@ -40,7 +40,7 @@ export default class Game extends Phaser.Scene {
     );
 
     // Add collision event listener
-    this.matter.world.on('collisionstart', this.handleCollision, this);
+    this.matter.world.on('collisionstart', this.handleAnimatronicsCollision, this);
 
     // Add mouse/touch event listeners
     this.input.on('pointerdown', this.handlePointerDown, this);
@@ -96,7 +96,7 @@ export default class Game extends Phaser.Scene {
     }
   }
 
-  handleCollision(event) {
+  handleAnimatronicsCollision(event) {
     const pairs = event.pairs;
 
     pairs.forEach((pair) => {
