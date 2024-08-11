@@ -31,8 +31,5 @@ export default class Game extends Phaser.Scene {
       centerX,
       centerY,
     );
-
-    // TODO: Delete when I'm done with setting colliders up
-    this.cameras.main.zoom = 4;
   }
 }
