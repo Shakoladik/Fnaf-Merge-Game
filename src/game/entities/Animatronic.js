@@ -168,6 +168,8 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
       vertices: colliderPoints,
     });
 
+    this.name = name;
+
     // Ensure the sprite is centered correctly
     this.setOrigin(0.5, 0.5);
 
