@@ -10,12 +10,27 @@ export default class Game extends Phaser.Scene {
   }
 
   async create() {
-    this.matter.world.setBounds(0, 0, this.game.config.width, this.game.config.height, 32, true, true, false, true);
+    this.matter.world.setBounds(
+      0,
+      0,
+      this.game.config.width,
+      this.game.config.height,
+      32,
+      true,
+      true,
+      false,
+      true,
+    );
 
     const centerX = this.scale.width / 2;
     const centerY = this.scale.height / 2;
 
-    const customObject = new Animatronic(this, AnimatronicsNames.BB, centerX, centerY);
+    const customObject = new Animatronic(
+      this,
+      AnimatronicsNames.ENDO,
+      centerX,
+      centerY,
+    );
 
     // TODO: Delete when I'm done with setting colliders up
     this.cameras.main.zoom = 4;
