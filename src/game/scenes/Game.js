@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 import AnimatronicsNames from '../utils/AnimatronicsNames';
 
+import Box from '../entities/Box';
 import Animatronic from '../entities/Animatronic';
 
 export default class Game extends Phaser.Scene {
@@ -9,8 +10,8 @@ export default class Game extends Phaser.Scene {
     super('Game');
 
     // These variables are used for restricting player to spawn animatronics outside the box for them
-    this.boxHeight = 300;
-    // TODO: Add vars for X axis
+    this.boxHeight = 250;
+    this.boxWidth = 160; // The allowed spawning range along the X-axis from the center
 
     // This map is used to go through animatronics names and spawn animatronics
     // with names based on what names of two collided animatronics were
@@ -21,26 +22,28 @@ export default class Game extends Phaser.Scene {
     this.spawnLineStartPoint = null;
     this.spawnLineGraphics = null;
     this.spawnLineLength = 400;
-    this.spawnLineWidth = 5;
+    this.spawnLineWidth = 2;
+
+    // Timer-related properties
+    this.lastSpawnTime = 0;
+    this.spawnCooldown = 350; // Cooldown time in milliseconds
   }
 
   create() {
     this.add.image(0, 0, 'background').setOrigin(0, 0);
 
-    this.matter.world.setBounds(
-      0,
-      0,
-      this.game.config.width,
-      this.game.config.height,
-      32,
-      true,
-      true,
-      false,
-      true,
+    const box = new Box(
+      this,
+      this.game.config.width / 2,
+      this.game.config.height / 2 + 180,
     );
 
     // Add collision event listener
-    this.matter.world.on('collisionstart', this.handleAnimatronicsCollision, this);
+    this.matter.world.on(
+      'collisionstart',
+      this.handleAnimatronicsCollision,
+      this,
+    );
 
     // Add mouse/touch event listeners
     this.input.on('pointerdown', this.handlePointerDown, this);
@@ -48,6 +51,8 @@ export default class Game extends Phaser.Scene {
     this.input.on('pointermove', this.handlePointerMove, this);
 
     this.spawnLineGraphics = this.add.graphics();
+
+    this.cameras.main.zoom = 1.3;
   }
 
   handlePointerDown(pointer) {
@@ -67,29 +72,51 @@ export default class Game extends Phaser.Scene {
       this.isDrawingSpawnLine = false;
       this.spawnLineGraphics.clear();
 
-      // Spawn an animatronic at the final mouse position
-      const animatronic = new Animatronic(
-        this,
-        AnimatronicsNames.ENDO,
-        pointer.x,
-        this.boxHeight,
-      );
+      // Check if the cooldown period has passed
+      const currentTime = this.time.now;
+      if (currentTime - this.lastSpawnTime >= this.spawnCooldown) {
+        // Adjust the pointer X position if it is outside the allowed spawning range
+        const centerX = this.game.config.width / 2;
+        let adjustedX = pointer.x;
+        if (Math.abs(pointer.x - centerX) > this.boxWidth) {
+          adjustedX = centerX + Math.sign(pointer.x - centerX) * this.boxWidth;
+        }
 
-      // Add the new animatronic to the scene and the map
-      this.add.existing(animatronic);
-      this.animatronicsMap.set(animatronic.name, animatronic);
+        // Spawn an animatronic at the adjusted mouse position
+        const animatronic = new Animatronic(
+          this,
+          AnimatronicsNames.ENDO,
+          adjustedX,
+          this.boxHeight,
+        );
+
+        // Add the new animatronic to the scene and the map
+        this.add.existing(animatronic);
+        this.animatronicsMap.set(animatronic.name, animatronic);
+
+        // Update the last spawn time
+        this.lastSpawnTime = currentTime;
+      }
     }
   }
 
   updateSpawnLine(pointer) {
     if (this.spawnLineGraphics && this.spawnLineStartPoint) {
       this.spawnLineGraphics.clear();
-      this.spawnLineGraphics.lineStyle(this.spawnLineWidth, 0x0000ff);
+      this.spawnLineGraphics.lineStyle(this.spawnLineWidth, 0xffffff);
+
+      // Adjust the pointer X position if it is outside the allowed spawning range
+      const centerX = this.game.config.width / 2;
+      let adjustedX = pointer.x;
+      if (Math.abs(pointer.x - centerX) > this.boxWidth) {
+        adjustedX = centerX + Math.sign(pointer.x - centerX) * this.boxWidth;
+      }
+
       const endY = this.boxHeight + this.spawnLineLength;
       this.spawnLineGraphics.lineBetween(
-        pointer.x,
+        adjustedX,
         this.boxHeight,
-        pointer.x,
+        adjustedX,
         endY,
       );
       this.spawnLineGraphics.strokePath();
