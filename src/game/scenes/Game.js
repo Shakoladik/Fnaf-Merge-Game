@@ -26,7 +26,7 @@ export default class Game extends Phaser.Scene {
 
     // Timer-related properties
     this.lastSpawnTime = 0;
-    this.spawnCooldown = 350; // Cooldown time in milliseconds
+    this.spawnCooldown = 320; // Cooldown time in milliseconds
   }
 
   create() {
