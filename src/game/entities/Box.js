@@ -12,17 +12,19 @@ export default class Box extends Phaser.Physics.Matter.Sprite {
     const { Bodies, Body } = Phaser.Physics.Matter.Matter;
 
     // Create three rectangles for the body
-    const rect1 = Bodies.rectangle(this.width / 2, 610, this.width, 50, { isStatic: true });
-    const rect2 = Bodies.rectangle(this.width + 10, 300, 50, this.height, { isStatic: true });
-    const rect3 = Bodies.rectangle(-10, 300, 50, this.height, { isStatic: true });
+    const rect1 = Bodies.rectangle(this.width / 2, 610, this.width, 50, {
+      isStatic: true,
+    });
+    const rect2 = Bodies.rectangle(this.width + 10, 300, 50, this.height, {
+      isStatic: true,
+    });
+    const rect3 = Bodies.rectangle(-10, 300, 50, this.height, {
+      isStatic: true,
+    });
 
     // Combine the rectangles into a single compound body
     const compoundBody = Body.create({
-      parts: [
-        rect1,
-        rect2,
-        rect3
-      ],
+      parts: [rect1, rect2, rect3],
       isStatic: true,
     });
 
