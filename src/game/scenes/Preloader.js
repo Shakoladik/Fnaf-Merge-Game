@@ -32,6 +32,8 @@ export default class Preloader extends Phaser.Scene {
 
     this.load.image('background', 'images/backgrounds/background.png');
 
+    this.load.image('box', 'images/props/empty-box.png');
+
     this.load.image(
       AnimatronicsNames.ENDO,
       `images/heads/${AnimatronicsNames.ENDO}.png`,
