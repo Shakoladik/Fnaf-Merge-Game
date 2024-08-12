@@ -11,6 +11,6 @@ const AnimatronicsNames = {
   MANGLE: 'mangle',
   GOLDEN_FREDDY: 'golden-freddy',
   PUPPET: 'puppet',
-}
+};
 
 export default AnimatronicsNames;
