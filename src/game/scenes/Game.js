@@ -21,7 +21,7 @@ export default class Game extends Phaser.Scene {
     this.isDrawingSpawnLine = false;
     this.spawnLineStartPoint = null;
     this.spawnLineGraphics = null;
-    this.spawnLineLength = 400;
+    this.spawnLineLength = 600;
     this.spawnLineWidth = 2;
 
     // Timer-related properties
