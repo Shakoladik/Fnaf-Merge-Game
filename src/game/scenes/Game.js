@@ -4,7 +4,6 @@ import AnimatronicsNames from '../utils/AnimatronicsNames';
 
 import Box from '../entities/Box';
 import Animatronic from '../entities/Animatronic';
-
 import Smoke from '../entities/Smoke';
 
 export default class Game extends Phaser.Scene {
