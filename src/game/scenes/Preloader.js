@@ -30,6 +30,10 @@ export default class Preloader extends Phaser.Scene {
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath('assets');
 
+    this.load.image('background', 'images/backgrounds/background.png');
+
+    this.load.image('box', 'images/props/empty-box.png');
+
     this.load.image(
       AnimatronicsNames.ENDO,
       `images/heads/${AnimatronicsNames.ENDO}.png`,
@@ -78,7 +82,7 @@ export default class Preloader extends Phaser.Scene {
       AnimatronicsNames.PUPPET,
       `images/heads/${AnimatronicsNames.PUPPET}.png`,
     );
-    this.load.image('plank', 'images/other/plank.png');
+    this.load.image('smoke', 'images/particles/smoke.png');
   }
 
   create() {
