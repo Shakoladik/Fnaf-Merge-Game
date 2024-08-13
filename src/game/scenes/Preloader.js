@@ -82,6 +82,8 @@ export default class Preloader extends Phaser.Scene {
       AnimatronicsNames.PUPPET,
       `images/heads/${AnimatronicsNames.PUPPET}.png`,
     );
+    
+    this.load.image('smoke', 'images/particles/smoke.png');
   }
 
   create() {

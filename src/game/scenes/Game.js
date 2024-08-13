@@ -4,6 +4,7 @@ import AnimatronicsNames from '../utils/AnimatronicsNames';
 
 import Box from '../entities/Box';
 import Animatronic from '../entities/Animatronic';
+import Smoke from '../entities/Smoke';
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -159,6 +160,9 @@ export default class Game extends Phaser.Scene {
           centerX,
           centerY,
         );
+
+        // Add Smoke
+        const smoke = new Smoke(this, centerX, centerY);
 
         // Add the new animatronic to the scene and the map
         this.add.existing(newAnimatronic);
