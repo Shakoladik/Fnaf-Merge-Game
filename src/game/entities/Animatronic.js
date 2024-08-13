@@ -103,18 +103,16 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
         break;
       case AnimatronicsNames.TOY_FREDDY:
         colliderPoints = [
-          { x: 0, y: 50 },
-          { x: 50, y: 50 },
-          { x: 50, y: 100 },
-          { x: 0, y: 100 },
           { x: -6, y: 32 },
+          { x: 25, y: 18 },
+          { x: 57, y: 32 },
+          { x: 43, y: 93 },
+          { x: 25, y: 97 },
+          { x: 8, y: 93 },
         ];
         break;
       case AnimatronicsNames.FOXY:
         colliderPoints = [
-          { x: 0, y: 50 },
-          { x: 50, y: 100 },
-          { x: 0, y: 100 },
           { x: -14, y: 23 },
           { x: -10, y: 16 },
           { x: 25, y: 32 },
