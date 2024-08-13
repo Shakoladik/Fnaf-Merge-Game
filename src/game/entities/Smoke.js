@@ -9,7 +9,7 @@ export default class Smoke extends Phaser.GameObjects.Sprite {
     this.vanishingSpeed = 300;
 
     // Set initial state that the smoke will start it's tween from
-    this.initialScale = 0.5
+    this.initialScale = 0.5;
 
     this.setScale(this.initialScale);
 
