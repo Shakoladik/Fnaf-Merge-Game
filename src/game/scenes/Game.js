@@ -5,6 +5,7 @@ import AnimatronicsNames from '../utils/AnimatronicsNames';
 import Box from '../entities/Box';
 import Animatronic from '../entities/Animatronic';
 import Smoke from '../entities/Smoke';
+import YandexSDK from '../utils/YandexSDK';
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -54,8 +55,8 @@ export default class Game extends Phaser.Scene {
     this.spawnLineGraphics = this.add.graphics();
 
     this.cameras.main.zoom = 1.3;
+    const yandex = new YandexSDK(this);
   }
-
   handlePointerDown(pointer) {
     this.isDrawingSpawnLine = true;
     this.spawnLineStartPoint = { x: pointer.x, y: this.boxHeight };
