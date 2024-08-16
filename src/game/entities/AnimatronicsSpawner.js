@@ -26,7 +26,7 @@ export default class AnimatronicsSpawner {
 
   handlePointerDown(pointer) {
     this.isDrawingSpawnLine = true;
-    this.spawnLineStartPoint = { x: pointer.x, y: this.boxHeight };
+    this.spawnLineStartPoint = { x: pointer.worldX, y: this.boxHeight };
     this.updateSpawnLine(pointer);
   }
 
@@ -44,9 +44,9 @@ export default class AnimatronicsSpawner {
       const currentTime = this.scene.time.now;
       if (currentTime - this.lastSpawnTime >= this.spawnCooldown) {
         const centerX = this.scene.game.config.width / 2;
-        let adjustedX = pointer.x;
-        if (Math.abs(pointer.x - centerX) > this.boxWidth) {
-          adjustedX = centerX + Math.sign(pointer.x - centerX) * this.boxWidth;
+        let adjustedX = pointer.worldX;
+        if (Math.abs(pointer.worldX - centerX) > this.boxWidth) {
+          adjustedX = centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
         }
 
         const animatronic = new Animatronic(
@@ -70,9 +70,9 @@ export default class AnimatronicsSpawner {
       this.spawnLineGraphics.lineStyle(this.spawnLineWidth, 0xffffff);
 
       const centerX = this.scene.game.config.width / 2;
-      let adjustedX = pointer.x;
-      if (Math.abs(pointer.x - centerX) > this.boxWidth) {
-        adjustedX = centerX + Math.sign(pointer.x - centerX) * this.boxWidth;
+      let adjustedX = pointer.worldX;
+      if (Math.abs(pointer.worldX - centerX) > this.boxWidth) {
+        adjustedX = centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
       }
 
       const endY = this.boxHeight + this.spawnLineLength;
