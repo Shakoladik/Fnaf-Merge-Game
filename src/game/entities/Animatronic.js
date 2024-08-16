@@ -191,9 +191,16 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
       const animatronicA = bodyA.gameObject;
       const animatronicB = bodyB.gameObject;
 
-      if (animatronicA instanceof Animatronic && animatronicB instanceof Animatronic) {
+      if (
+        animatronicA instanceof Animatronic &&
+        animatronicB instanceof Animatronic
+      ) {
         if (animatronicA === this || animatronicB === this) {
-          this.handleAnimatronicCollision(animatronicA, animatronicB, this.scene);
+          this.handleAnimatronicCollision(
+            animatronicA,
+            animatronicB,
+            this.scene,
+          );
         }
       }
     });
@@ -209,8 +216,11 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
       const centerX = (animatronicA.x + animatronicB.x) / 2;
       const centerY = (animatronicA.y + animatronicB.y) / 2;
 
-      const currentIndex = Object.values(AnimatronicsNames).indexOf(animatronicA.name);
-      const nextIndex = (currentIndex + 1) % Object.values(AnimatronicsNames).length;
+      const currentIndex = Object.values(AnimatronicsNames).indexOf(
+        animatronicA.name,
+      );
+      const nextIndex =
+        (currentIndex + 1) % Object.values(AnimatronicsNames).length;
       const nextName = Object.values(AnimatronicsNames)[nextIndex];
 
       const newAnimatronic = new Animatronic(scene, nextName, centerX, centerY);
