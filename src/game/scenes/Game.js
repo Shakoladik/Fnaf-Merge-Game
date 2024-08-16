@@ -21,6 +21,6 @@ export default class Game extends Phaser.Scene {
 
     this.animatronicsSpawner = new AnimatronicsSpawner(this);
 
-    this.cameras.main.zoom = 1.5;
+    this.cameras.main.zoom = 1.7;
   }
 }
