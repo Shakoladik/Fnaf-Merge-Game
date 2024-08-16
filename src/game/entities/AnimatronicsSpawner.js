@@ -1,5 +1,4 @@
 import AnimatronicsNames from '../utils/AnimatronicsNames';
-
 import Animatronic from '../entities/Animatronic';
 
 export default class AnimatronicsSpawner {
@@ -13,8 +12,7 @@ export default class AnimatronicsSpawner {
     this.spawnLineGraphics = this.scene.add.graphics();
     this.spawnLineLength = 500;
     this.spawnLineWidth = 2;
-    this.lastSpawnTime = 0;
-    this.spawnCooldown = 320;
+    this.lastSpawnedAnimatronic = null;
 
     // Add mouse/touch event listeners
     this.scene.input.on('pointerdown', this.handlePointerDown, this);
@@ -39,14 +37,13 @@ export default class AnimatronicsSpawner {
       this.isDrawingSpawnLine = false;
       this.spawnLineGraphics.clear();
 
-      const currentTime = this.scene.time.now;
-      if (currentTime - this.lastSpawnTime >= this.spawnCooldown) {
-        const centerX = this.scene.game.config.width / 2;
-        let adjustedX = pointer.worldX;
-        if (Math.abs(pointer.worldX - centerX) > this.boxWidth) {
-          adjustedX = centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
-        }
+      const centerX = this.scene.game.config.width / 2;
+      let adjustedX = pointer.worldX;
+      if (Math.abs(pointer.worldX - centerX) > this.boxWidth) {
+        adjustedX = centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
+      }
 
+      if (this.canSpawnNewAnimatronic()) {
         const animatronic = new Animatronic(
           this.scene,
           AnimatronicsNames.ENDO,
@@ -56,10 +53,33 @@ export default class AnimatronicsSpawner {
 
         this.scene.add.existing(animatronic);
         this.animatronicsMap.set(animatronic.name, animatronic);
-
-        this.lastSpawnTime = currentTime;
+        this.lastSpawnedAnimatronic = animatronic;
       }
     }
+  }
+
+  canSpawnNewAnimatronic() {
+    if (!this.lastSpawnedAnimatronic) {
+      return true;
+    }
+
+    let animatronicHeight;
+    let animatronicY;
+
+    // The previous animatronic may be merged with another one and destroyed
+    // In that case we cannot get its height and y coordinate, but we don't actually need them
+    try {
+      animatronicHeight = this.lastSpawnedAnimatronic.height;
+      animatronicY = this.lastSpawnedAnimatronic.y;
+    }
+    catch {
+      // In that case we simply say that we can spawn the next animatronic
+      return true;
+    }
+
+    const spawnY = this.boxHeight;
+
+    return animatronicY >= spawnY + animatronicHeight;
   }
 
   updateSpawnLine(pointer) {
