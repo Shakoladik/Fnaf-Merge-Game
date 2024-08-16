@@ -168,6 +168,8 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
     // Create the Animatronic with custom polygon collider
     super(scene.matter.world, x, y, name, 0, {
       vertices: colliderPoints,
+      friction: 1,
+      frictionStatic: 0,
     });
 
     this.name = name;
