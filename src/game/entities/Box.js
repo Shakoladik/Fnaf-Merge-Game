@@ -12,13 +12,13 @@ export default class Box extends Phaser.Physics.Matter.Sprite {
     const { Bodies, Body } = Phaser.Physics.Matter.Matter;
 
     // Create three rectangles for the body
-    const rect1 = Bodies.rectangle(this.width / 2, 610, this.width, 50, {
+    const rect1 = Bodies.rectangle(this.width / 2, 510, this.width, 10, {
       isStatic: true,
     });
-    const rect2 = Bodies.rectangle(this.width + 10, 300, 50, this.height, {
+    const rect2 = Bodies.rectangle(this.width - 5, 300, 10, this.height - 115, {
       isStatic: true,
     });
-    const rect3 = Bodies.rectangle(-10, 300, 50, this.height, {
+    const rect3 = Bodies.rectangle(5, 300, 10, this.height - 115, {
       isStatic: true,
     });
 
