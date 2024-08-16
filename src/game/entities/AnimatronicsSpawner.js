@@ -1,4 +1,5 @@
 import AnimatronicsNames from '../utils/AnimatronicsNames';
+
 import Animatronic from '../entities/Animatronic';
 
 export default class AnimatronicsSpawner {
@@ -40,7 +41,8 @@ export default class AnimatronicsSpawner {
       const centerX = this.scene.game.config.width / 2;
       let adjustedX = pointer.worldX;
       if (Math.abs(pointer.worldX - centerX) > this.boxWidth) {
-        adjustedX = centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
+        adjustedX =
+          centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
       }
 
       if (this.canSpawnNewAnimatronic()) {
@@ -71,8 +73,7 @@ export default class AnimatronicsSpawner {
     try {
       animatronicHeight = this.lastSpawnedAnimatronic.height;
       animatronicY = this.lastSpawnedAnimatronic.y;
-    }
-    catch {
+    } catch {
       // In that case we simply say that we can spawn the next animatronic
       return true;
     }
@@ -90,7 +91,8 @@ export default class AnimatronicsSpawner {
       const centerX = this.scene.game.config.width / 2;
       let adjustedX = pointer.worldX;
       if (Math.abs(pointer.worldX - centerX) > this.boxWidth) {
-        adjustedX = centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
+        adjustedX =
+          centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
       }
 
       const endY = this.boxHeight + this.spawnLineLength;
