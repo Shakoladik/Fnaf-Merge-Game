@@ -1,5 +1,3 @@
-import Phaser from 'phaser';
-
 import AnimatronicsNames from '../utils/AnimatronicsNames';
 
 import Animatronic from '../entities/Animatronic';
@@ -7,13 +5,13 @@ import Animatronic from '../entities/Animatronic';
 export default class AnimatronicsSpawner {
   constructor(scene) {
     this.scene = scene;
-    this.boxHeight = 250;
-    this.boxWidth = 160;
+    this.boxHeight = 280;
+    this.boxWidth = 140;
     this.animatronicsMap = new Map();
     this.isDrawingSpawnLine = false;
     this.spawnLineStartPoint = null;
     this.spawnLineGraphics = this.scene.add.graphics();
-    this.spawnLineLength = 600;
+    this.spawnLineLength = 500;
     this.spawnLineWidth = 2;
     this.lastSpawnTime = 0;
     this.spawnCooldown = 320;
