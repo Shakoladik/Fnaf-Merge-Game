@@ -1,97 +1,105 @@
 import Phaser from 'phaser';
 
 export default class YandexSDK {
-  _TIME_BETWEEN_ADS = 62000; // in milliseconds
-  _timeUntilAdv = 2;
+  static TIME_BETWEEN_ADS = 62000; // in milliseconds
+  static TIME_UNTIL_AD_COUNTDOWN = 2;
+
   constructor(scene) {
     this.scene = scene;
-    YaGames.init().then((ysdk) => {
+    this.timeUntilAdv = YandexSDK.TIME_UNTIL_AD_COUNTDOWN;
+    this.ysdk = null;
+
+    this.initializeYandexSDK();
+  }
+
+  async initializeYandexSDK() {
+    try {
+      this.ysdk = await YaGames.init();
       console.log('Yandex SDK initialized');
-      window.ysdk = ysdk;
-    });
-    YaGames.init().then((ysdk) =>
-      ysdk.adv.showFullscreenAdv({
-        callbacks: {
-          onClose: () => {
-            this.startTimer();
-          },
-          onError: (e) => {
-            console.log('Error showing adv: ', e);
-            this.startTimer();
-          },
-        },
-      }),
-    );
+      this.showFullscreenAd();
+    } catch (error) {
+      console.error('Error initializing Yandex SDK:', error);
     }
+  }
+
+  showFullscreenAd() {
+    this.ysdk.adv.showFullscreenAdv({
+      callbacks: {
+        onClose: () => this.startTimer(),
+        onError: (e) => {
+          console.log('Error showing adv:', e);
+          this.startTimer();
+        },
+      },
+    });
+  }
 
   startTimer() {
     this.scene.time.addEvent({
-      delay: this._TIME_BETWEEN_ADS,
-      callback: this.showAdvFunc,
+      delay: YandexSDK.TIME_BETWEEN_ADS,
+      callback: this.showFullscreenAd,
       callbackScope: this,
     });
+
     this.scene.time.addEvent({
-      delay: this._TIME_BETWEEN_ADS - 2000,
-      callback: this.timerUntilAdvCounter,
+      delay: YandexSDK.TIME_BETWEEN_ADS - 2000,
+      callback: this.startAdCountdown,
       callbackScope: this,
     });
   }
 
-  showAdvFunc() {
-    YaGames.init().then((ysdk) =>
-      ysdk.adv.showFullscreenAdv({
-        callbacks: {
-          onClose: () => {
-            this.startTimer();
-          },
-          onError: (e) => {
-            console.log('Error showing adv: ', e);
-            this.startTimer();
-          },
-        },
-      }),
-    );
-  }
-  timerUntilAdvCounter() {
-    const block = this.scene.add.rectangle(
-      this.scene.game.config.width / 2,
-      this.scene.game.config.height / 2,
-      this.scene.game.config.width,
-      this.scene.game.config.height / 10,
-      0,
-      1,
-    );
+  startAdCountdown() {
+    const block = this.createCountdownBlock();
     this.scene.tweens.add({
-      targets: this,
+      targets: block,
       alpha: { from: 1, to: 1 },
       duration: 2000,
       onComplete: () => {
         block.destroy();
-        this._timeUntilAdv = 2;
+        this.timeUntilAdv = YandexSDK.TIME_UNTIL_AD_COUNTDOWN;
       },
     });
-    this.textFunc();
-    this.scene.time.addEvent({
-      delay: 1000,
-      callback: this.textFunc,
-      callbackScope: this,
-    });
+
+    this.updateCountdownText();
+    this.scheduleTextUpdate();
   }
-  textFunc() {
-    const text = this.scene.add.text(
-      this.scene.game.config.width / 2,
-      this.scene.game.config.height / 2,
-      `Время до начала рекламы: ${this._timeUntilAdv}`,
+
+  createCountdownBlock() {
+    const { width, height } = this.scene.game.config;
+    return this.scene.add.rectangle(
+      width / 2,
+      height / 2,
+      width,
+      height / 10,
+      0,
+      1,
     );
-    this._timeUntilAdv -= 1;
+  }
+
+  updateCountdownText() {
+    const { width, height } = this.scene.game.config;
+    const text = this.scene.add.text(
+      width / 2,
+      height / 2,
+      `Время до начала рекламы: ${this.timeUntilAdv}`,
+    );
     text.setOrigin(0.5, 0.5);
+    this.timeUntilAdv -= 1;
     this.scene.tweens.add({
-      targets: this,
+      targets: text,
       alpha: { from: 1, to: 1 },
       duration: 1000,
       onComplete: () => {
         text.destroy();
       },
+    });
+  }
+
+  scheduleTextUpdate() {
+    this.scene.time.addEvent({
+      delay: 1000,
+      callback: this.updateCountdownText,
+      callbackScope: this,
     });
   }
 }

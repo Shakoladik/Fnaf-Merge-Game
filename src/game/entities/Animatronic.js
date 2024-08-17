@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 
 import AnimatronicsNames from '../utils/AnimatronicsNames';
 
+import Smoke from '../entities/Smoke';
+
 export default class Animatronic extends Phaser.Physics.Matter.Sprite {
   constructor(scene, name, x, y) {
     let colliderPoints = null;
@@ -166,6 +168,8 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
     // Create the Animatronic with custom polygon collider
     super(scene.matter.world, x, y, name, 0, {
       vertices: colliderPoints,
+      friction: 1,
+      frictionStatic: 0,
     });
 
     this.name = name;
@@ -174,5 +178,69 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
     this.setOrigin(0.5, 0.5);
 
     scene.add.existing(this);
+
+    // Add collision event listener
+    scene.matter.world.on('collisionstart', this.handleCollision, this);
+  }
+
+  handleCollision(event) {
+    const pairs = event.pairs;
+
+    pairs.forEach((pair) => {
+      const bodyA = pair.bodyA;
+      const bodyB = pair.bodyB;
+
+      const animatronicA = bodyA.gameObject;
+      const animatronicB = bodyB.gameObject;
+
+      if (
+        animatronicA instanceof Animatronic &&
+        animatronicB instanceof Animatronic
+      ) {
+        if (animatronicA === this || animatronicB === this) {
+          this.handleAnimatronicCollision(
+            animatronicA,
+            animatronicB,
+            this.scene,
+          );
+        }
+      }
+    });
+  }
+
+  handleAnimatronicCollision(animatronicA, animatronicB, scene) {
+    if (animatronicA.name === animatronicB.name) {
+      if (animatronicA.name === AnimatronicsNames.PUPPET) {
+        console.log('Player has won!');
+        return;
+      }
+
+      const centerX = (animatronicA.x + animatronicB.x) / 2;
+      const centerY = (animatronicA.y + animatronicB.y) / 2;
+
+      const currentIndex = Object.values(AnimatronicsNames).indexOf(
+        animatronicA.name,
+      );
+      const nextIndex =
+        (currentIndex + 1) % Object.values(AnimatronicsNames).length;
+      const nextName = Object.values(AnimatronicsNames)[nextIndex];
+
+      const newAnimatronic = new Animatronic(scene, nextName, centerX, centerY);
+
+      // Add Smoke
+      const smoke = new Smoke(scene, centerX, centerY);
+
+      // Add the new animatronic to the scene and the map
+      scene.add.existing(newAnimatronic);
+      scene.animatronicsSpawner.animatronicsMap.set(nextName, newAnimatronic);
+
+      // Destroy the colliding animatronics
+      animatronicA.destroy();
+      animatronicB.destroy();
+
+      // Remove the destroyed animatronics from the map
+      scene.animatronicsSpawner.animatronicsMap.delete(animatronicA.name);
+      scene.animatronicsSpawner.animatronicsMap.delete(animatronicB.name);
+    }
   }
 }
