@@ -84,6 +84,8 @@ export default class Preloader extends Phaser.Scene {
     );
 
     this.load.image('smoke', 'images/particles/smoke.png');
+
+    this.load.audio('merge', 'audio/merge_sound.wav');
   }
 
   create() {
