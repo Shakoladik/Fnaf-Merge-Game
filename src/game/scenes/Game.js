@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 
+import YandexSDK from '../utils/YandexSDK';
+
 import Box from '../entities/Box';
 import AnimatronicsSpawner from '../entities/AnimatronicsSpawner';
 
@@ -11,6 +13,8 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+    new YandexSDK(this);
+    
     this.add.image(0, 0, 'background').setOrigin(0, 0);
 
     new Box(
