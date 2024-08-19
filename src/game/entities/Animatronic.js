@@ -1,11 +1,9 @@
 import Phaser from 'phaser';
-
 import AnimatronicsNames from '../utils/AnimatronicsNames';
-
 import Smoke from '../entities/Smoke';
 
 export default class Animatronic extends Phaser.Physics.Matter.Sprite {
-  constructor(scene, name, x, y) {
+  constructor(scene, name, x, y, enablePhysics = false) {
     let colliderPoints = null;
 
     switch (name) {
@@ -177,10 +175,22 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
     // Ensure the sprite is centered correctly
     this.setOrigin(0.5, 0.5);
 
-    scene.add.existing(this);
+    if (enablePhysics) {
+      scene.add.existing(this);
+    } else {
+      scene.add.existing(this.setStatic(true));
+    }
 
     // Add collision event listener
     scene.matter.world.on('collisionstart', this.handleCollision, this);
+  }
+
+  enablePhysics() {
+    this.setStatic(false);
+  }
+
+  updatePosition(x, y) {
+    this.setPosition(x, y);
   }
 
   handleCollision(event) {
@@ -225,7 +235,7 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
         (currentIndex + 1) % Object.values(AnimatronicsNames).length;
       const nextName = Object.values(AnimatronicsNames)[nextIndex];
 
-      const newAnimatronic = new Animatronic(scene, nextName, centerX, centerY);
+      const newAnimatronic = new Animatronic(scene, nextName, centerX, centerY, true);
 
       // Add Smoke
       const smoke = new Smoke(scene, centerX, centerY);

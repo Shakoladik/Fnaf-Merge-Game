@@ -1,5 +1,4 @@
 import AnimatronicsNames from '../utils/AnimatronicsNames';
-
 import Animatronic from '../entities/Animatronic';
 
 export default class AnimatronicsSpawner {
@@ -19,6 +18,14 @@ export default class AnimatronicsSpawner {
     this.scene.input.on('pointerdown', this.handlePointerDown, this);
     this.scene.input.on('pointerup', this.handlePointerUp, this);
     this.scene.input.on('pointermove', this.handlePointerMove, this);
+
+    // Set up a timer to check for spawning conditions periodically
+    this.scene.time.addEvent({
+      delay: 10,
+      callback: this.checkAndSpawnAnimatronic,
+      callbackScope: this,
+      loop: true
+    });
   }
 
   handlePointerDown(pointer) {
@@ -30,6 +37,11 @@ export default class AnimatronicsSpawner {
   handlePointerMove(pointer) {
     if (this.isDrawingSpawnLine) {
       this.updateSpawnLine(pointer);
+
+      // Move the last spawned animatronic if it has no physics
+      if (this.lastSpawnedAnimatronic && this.lastSpawnedAnimatronic.body.isStatic) {
+        this.lastSpawnedAnimatronic.updatePosition(pointer.worldX, this.boxHeight);
+      }
     }
   }
 
@@ -38,24 +50,9 @@ export default class AnimatronicsSpawner {
       this.isDrawingSpawnLine = false;
       this.spawnLineGraphics.clear();
 
-      const centerX = this.scene.game.config.width / 2;
-      let adjustedX = pointer.worldX;
-      if (Math.abs(pointer.worldX - centerX) > this.boxWidth) {
-        adjustedX =
-          centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
-      }
-
-      if (this.canSpawnNewAnimatronic()) {
-        const animatronic = new Animatronic(
-          this.scene,
-          AnimatronicsNames.ENDO,
-          adjustedX,
-          this.boxHeight,
-        );
-
-        this.scene.add.existing(animatronic);
-        this.animatronicsMap.set(animatronic.name, animatronic);
-        this.lastSpawnedAnimatronic = animatronic;
+      // Enable physics for the last spawned animatronic
+      if (this.lastSpawnedAnimatronic) {
+        this.lastSpawnedAnimatronic.enablePhysics();
       }
     }
   }
@@ -103,6 +100,25 @@ export default class AnimatronicsSpawner {
         endY,
       );
       this.spawnLineGraphics.strokePath();
+    }
+  }
+
+  checkAndSpawnAnimatronic() {
+    if (this.canSpawnNewAnimatronic()) {
+      const centerX = this.scene.game.config.width / 2;
+      const adjustedX = centerX; // You can adjust this as needed
+
+      const animatronic = new Animatronic(
+        this.scene,
+        AnimatronicsNames.ENDO,
+        adjustedX,
+        this.boxHeight,
+        false // Spawn without physics
+      );
+
+      this.scene.add.existing(animatronic);
+      this.animatronicsMap.set(animatronic.name, animatronic);
+      this.lastSpawnedAnimatronic = animatronic;
     }
   }
 }
