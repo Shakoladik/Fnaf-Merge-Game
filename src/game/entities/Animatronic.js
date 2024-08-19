@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
+
 import AnimatronicsNames from '../utils/AnimatronicsNames';
+
 import Smoke from '../entities/Smoke';
 
 export default class Animatronic extends Phaser.Physics.Matter.Sprite {
