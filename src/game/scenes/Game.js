@@ -14,7 +14,7 @@ export default class Game extends Phaser.Scene {
 
   create() {
     new YandexSDK(this);
-    
+
     this.add.image(0, 0, 'background').setOrigin(0, 0);
 
     new Box(
@@ -22,7 +22,6 @@ export default class Game extends Phaser.Scene {
       this.game.config.width / 2,
       this.game.config.height / 2 + 150,
     );
-
     this.animatronicsSpawner = new AnimatronicsSpawner(this);
 
     this.cameras.main.zoom = 1.7;
