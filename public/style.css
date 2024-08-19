@@ -15,3 +15,7 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+body {
+  background-image: url("assets/images/backgrounds/background.png");
+}
