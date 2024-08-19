@@ -1,9 +1,8 @@
 import Boot from './game/scenes/Boot';
 import Preloader from './game/scenes/Preloader';
 import Game from './game/scenes/Game';
+import GameOver from './game/scenes/GameOver';
 
-//  Find out more information about the Game Config at:
-//  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config = {
   type: Phaser.AUTO,
   width: 1920,
@@ -21,7 +20,7 @@ const config = {
       debug: true,
     },
   },
-  scene: [Boot, Preloader, Game],
+  scene: [Boot, Preloader, Game, GameOver],
 };
 
 export default new Phaser.Game(config);
