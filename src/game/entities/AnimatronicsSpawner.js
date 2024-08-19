@@ -13,6 +13,8 @@ export default class AnimatronicsSpawner {
     this.spawnLineLength = 500;
     this.spawnLineWidth = 2;
     this.lastSpawnedAnimatronic = null;
+    this.isPointerDown = false;
+    this.lastPointerPosition = null;
 
     // Add mouse/touch event listeners
     this.scene.input.on('pointerdown', this.handlePointerDown, this);
@@ -29,23 +31,37 @@ export default class AnimatronicsSpawner {
   }
 
   handlePointerDown(pointer) {
-    this.isDrawingSpawnLine = true;
-    this.spawnLineStartPoint = { x: pointer.worldX, y: this.boxHeight };
-    this.updateSpawnLine(pointer);
+    this.isPointerDown = true;
+    this.lastPointerPosition = { x: pointer.worldX, y: pointer.worldY };
+
+    if (this.lastSpawnedAnimatronic && this.lastSpawnedAnimatronic.body.isStatic) {
+      this.isDrawingSpawnLine = true;
+      this.spawnLineStartPoint = { x: pointer.worldX, y: this.boxHeight };
+      this.updateSpawnLine(pointer);
+
+      // Update the animatronic's position to the starting point of the spawn line
+      const clampedX = this.clampX(pointer.worldX);
+      this.lastSpawnedAnimatronic.updatePosition(clampedX, this.boxHeight);
+    }
   }
 
   handlePointerMove(pointer) {
+    this.lastPointerPosition = { x: pointer.worldX, y: pointer.worldY };
+
     if (this.isDrawingSpawnLine) {
       this.updateSpawnLine(pointer);
 
       // Move the last spawned animatronic if it has no physics
       if (this.lastSpawnedAnimatronic && this.lastSpawnedAnimatronic.body.isStatic) {
-        this.lastSpawnedAnimatronic.updatePosition(pointer.worldX, this.boxHeight);
+        const clampedX = this.clampX(pointer.worldX);
+        this.lastSpawnedAnimatronic.updatePosition(clampedX, this.boxHeight);
       }
     }
   }
 
   handlePointerUp(pointer) {
+    this.isPointerDown = false;
+
     if (this.isDrawingSpawnLine) {
       this.isDrawingSpawnLine = false;
       this.spawnLineGraphics.clear();
@@ -119,6 +135,24 @@ export default class AnimatronicsSpawner {
       this.scene.add.existing(animatronic);
       this.animatronicsMap.set(animatronic.name, animatronic);
       this.lastSpawnedAnimatronic = animatronic;
+
+      // If the pointer is still down, start drawing the spawn line
+      if (this.isPointerDown && this.lastPointerPosition) {
+        this.isDrawingSpawnLine = true;
+        this.spawnLineStartPoint = { x: this.lastPointerPosition.x, y: this.boxHeight };
+        this.updateSpawnLine(this.lastPointerPosition);
+
+        // Update the animatronic's position to the starting point of the spawn line
+        const clampedX = this.clampX(this.lastPointerPosition.x);
+        this.lastSpawnedAnimatronic.updatePosition(clampedX, this.boxHeight);
+      }
     }
+  }
+
+  clampX(x) {
+    const centerX = this.scene.game.config.width / 2;
+    const minX = centerX - this.boxWidth;
+    const maxX = centerX + this.boxWidth;
+    return Math.max(minX, Math.min(x, maxX));
   }
 }
