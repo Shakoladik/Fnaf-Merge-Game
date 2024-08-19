@@ -22,9 +22,8 @@ export default class GameOver extends Phaser.Scene {
       { fontFamily: 'Arial', fontSize: 24, color: '#000000' }
     ).setOrigin(0.5);
 
-    // Make the restart text interactive
-    restartText.setInteractive();
-    restartText.on('pointerdown', () => {
+    // Make the entire scene interactive
+    this.input.on('pointerdown', () => {
       // Restart the game or go back to the main game scene
       this.scene.start('Game');
     });
