@@ -235,7 +235,13 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
         (currentIndex + 1) % Object.values(AnimatronicsNames).length;
       const nextName = Object.values(AnimatronicsNames)[nextIndex];
 
-      const newAnimatronic = new Animatronic(scene, nextName, centerX, centerY, true);
+      const newAnimatronic = new Animatronic(
+        scene,
+        nextName,
+        centerX,
+        centerY,
+        true,
+      );
 
       // Add Smoke
       const smoke = new Smoke(scene, centerX, centerY);

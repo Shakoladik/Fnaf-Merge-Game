@@ -26,7 +26,7 @@ export default class AnimatronicsSpawner {
       delay: 10,
       callback: this.checkAndSpawnAnimatronic,
       callbackScope: this,
-      loop: true
+      loop: true,
     });
   }
 
@@ -34,7 +34,10 @@ export default class AnimatronicsSpawner {
     this.isPointerDown = true;
     this.lastPointerPosition = { x: pointer.worldX, y: pointer.worldY };
 
-    if (this.lastSpawnedAnimatronic && this.lastSpawnedAnimatronic.body.isStatic) {
+    if (
+      this.lastSpawnedAnimatronic &&
+      this.lastSpawnedAnimatronic.body.isStatic
+    ) {
       this.isDrawingSpawnLine = true;
       this.spawnLineStartPoint = { x: pointer.worldX, y: this.boxHeight };
       this.updateSpawnLine(pointer);
@@ -52,7 +55,10 @@ export default class AnimatronicsSpawner {
       this.updateSpawnLine(pointer);
 
       // Move the last spawned animatronic if it has no physics
-      if (this.lastSpawnedAnimatronic && this.lastSpawnedAnimatronic.body.isStatic) {
+      if (
+        this.lastSpawnedAnimatronic &&
+        this.lastSpawnedAnimatronic.body.isStatic
+      ) {
         const clampedX = this.clampX(pointer.worldX);
         this.lastSpawnedAnimatronic.updatePosition(clampedX, this.boxHeight);
       }
@@ -122,14 +128,13 @@ export default class AnimatronicsSpawner {
   checkAndSpawnAnimatronic() {
     if (this.canSpawnNewAnimatronic()) {
       const centerX = this.scene.game.config.width / 2;
-      const adjustedX = centerX; // You can adjust this as needed
 
       const animatronic = new Animatronic(
         this.scene,
         AnimatronicsNames.ENDO,
-        adjustedX,
+        centerX,
         this.boxHeight,
-        false // Spawn without physics
+        false,
       );
 
       this.scene.add.existing(animatronic);
@@ -139,7 +144,10 @@ export default class AnimatronicsSpawner {
       // If the pointer is still down, start drawing the spawn line
       if (this.isPointerDown && this.lastPointerPosition) {
         this.isDrawingSpawnLine = true;
-        this.spawnLineStartPoint = { x: this.lastPointerPosition.x, y: this.boxHeight };
+        this.spawnLineStartPoint = {
+          x: this.lastPointerPosition.x,
+          y: this.boxHeight,
+        };
         this.updateSpawnLine(this.lastPointerPosition);
 
         // Update the animatronic's position to the starting point of the spawn line

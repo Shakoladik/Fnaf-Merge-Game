@@ -21,10 +21,15 @@ export default class Preloader extends Phaser.Scene {
     const barY = screenHeight / 2;
 
     // Create the outline of the loading bar
-    this.add.rectangle(barX, barY, barWidth, barHeight).setStrokeStyle(2, 0x000000).setOrigin(0.5, 0.5);
+    this.add
+      .rectangle(barX, barY, barWidth, barHeight)
+      .setStrokeStyle(2, 0x000000)
+      .setOrigin(0.5, 0.5);
 
     // Create the progress bar itself
-    const progressBar = this.add.rectangle(barX - barWidth / 2, barY, 0, barHeight, 0x00ff00).setOrigin(0, 0.5);
+    const progressBar = this.add
+      .rectangle(barX - barWidth / 2, barY, 0, barHeight, 0x00ff00)
+      .setOrigin(0, 0.5);
 
     // Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
     this.load.on('progress', (progress) => {
