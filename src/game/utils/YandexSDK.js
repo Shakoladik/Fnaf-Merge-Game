@@ -16,6 +16,10 @@ export default class YandexSDK {
     try {
       this.ysdk = await YaGames.init();
       console.log('Yandex SDK initialized');
+
+      this.ysdk.features.LoadingAPI.ready();
+      console.log('Game is ready to play');
+
       this.showFullscreenAd();
     } catch (error) {
       console.error('Error initializing Yandex SDK:', error);
@@ -35,7 +39,7 @@ export default class YandexSDK {
   }
 
   startTimer() {
-    this.scene.input.enable(this.scene);  //Enabling inputs and physics
+    this.scene.input.enable(this.scene); //Enabling inputs and physics
     this.scene.matter.resume();
 
     this.scene.time.addEvent({

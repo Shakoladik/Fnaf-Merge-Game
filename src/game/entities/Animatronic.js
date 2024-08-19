@@ -230,7 +230,7 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
       // Add Smoke
       const smoke = new Smoke(scene, centerX, centerY);
       // Play sound
-      scene.sound.play('merge', {volume: 0.35}); //set volume to 0.35
+      scene.sound.play('merge', { volume: 0.35 }); //set volume to 0.35
       // Add the new animatronic to the scene and the map
       scene.add.existing(newAnimatronic);
       scene.animatronicsSpawner.animatronicsMap.set(nextName, newAnimatronic);
