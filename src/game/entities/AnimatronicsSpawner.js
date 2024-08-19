@@ -1,11 +1,12 @@
 import AnimatronicsNames from '../utils/AnimatronicsNames';
+
 import Animatronic from '../entities/Animatronic';
 
 export default class AnimatronicsSpawner {
   constructor(scene) {
     this.scene = scene;
     this.boxHeight = 280;
-    this.boxWidth = 140;
+    this.boxWidth = 125;
     this.animatronicsMap = new Map();
     this.isDrawingSpawnLine = false;
     this.spawnLineStartPoint = null;
@@ -129,9 +130,22 @@ export default class AnimatronicsSpawner {
     if (this.canSpawnNewAnimatronic()) {
       const centerX = this.scene.game.config.width / 2;
 
+      // Array of possible animatronic names
+      const possibleAnimatronics = [
+        AnimatronicsNames.ENDO,
+        AnimatronicsNames.BB,
+        AnimatronicsNames.BONNIE,
+      ];
+
+      // Select a random animatronic name
+      const randomAnimatronicName =
+        possibleAnimatronics[
+          Math.floor(Math.random() * possibleAnimatronics.length)
+        ];
+
       const animatronic = new Animatronic(
         this.scene,
-        AnimatronicsNames.ENDO,
+        randomAnimatronicName,
         centerX,
         this.boxHeight,
         false,
