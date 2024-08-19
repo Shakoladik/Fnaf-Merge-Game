@@ -35,6 +35,9 @@ export default class YandexSDK {
   }
 
   startTimer() {
+    this.scene.input.enable(this.scene);  //Enabling inputs and physics
+    this.scene.matter.resume();
+
     this.scene.time.addEvent({
       delay: YandexSDK.TIME_BETWEEN_ADS,
       callback: this.showFullscreenAd,
@@ -49,6 +52,9 @@ export default class YandexSDK {
   }
 
   startAdCountdown() {
+    this.scene.input.disable(this.scene); //Disabling inputs and physics
+    this.scene.matter.pause();
+
     const block = this.createCountdownBlock();
     this.scene.tweens.add({
       targets: block,

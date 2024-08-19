@@ -28,7 +28,6 @@ export default class Smoke extends Phaser.GameObjects.Sprite {
         this.destroy();
       },
     });
-
     scene.add.existing(this);
   }
 }
