@@ -10,19 +10,31 @@ export default class Preloader extends Phaser.Scene {
   }
 
   init() {
-    //  We loaded this image in our Boot Scene, so we can display it here
-    //this.add.image(512, 384, 'background');
+    // Screen dimensions
+    const screenWidth = 1920;
+    const screenHeight = 1080;
 
-    //  A simple progress bar. This is the outline of the bar.
-    this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
+    // Loading bar dimensions
+    const barWidth = screenWidth / 3;
+    const barHeight = 50;
+    const barX = screenWidth / 2;
+    const barY = screenHeight / 2;
 
-    //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
-    const bar = this.add.rectangle(512 - 230, 384, 4, 28, 0xffffff);
+    // Create the outline of the loading bar
+    this.add
+      .rectangle(barX, barY, barWidth, barHeight)
+      .setStrokeStyle(2, 0x000000)
+      .setOrigin(0.5, 0.5);
 
-    //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
+    // Create the progress bar itself
+    const progressBar = this.add
+      .rectangle(barX - barWidth / 2, barY, 0, barHeight, 0x00ff00)
+      .setOrigin(0, 0.5);
+
+    // Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
     this.load.on('progress', (progress) => {
-      //  Update the progress bar (our bar is 464px wide, so 100% = 464px)
-      bar.width = 4 + 460 * progress;
+      // Update the progress bar width based on the progress
+      progressBar.width = barWidth * progress;
     });
   }
 

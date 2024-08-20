@@ -1,11 +1,9 @@
 import Phaser from 'phaser';
-
 import AnimatronicsNames from '../utils/AnimatronicsNames';
-
 import Smoke from '../entities/Smoke';
 
 export default class Animatronic extends Phaser.Physics.Matter.Sprite {
-  constructor(scene, name, x, y) {
+  constructor(scene, name, x, y, enablePhysics = false) {
     let colliderPoints = null;
 
     switch (name) {
@@ -173,14 +171,34 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
     });
 
     this.name = name;
+    this.scene = scene; // Store the scene reference
 
     // Ensure the sprite is centered correctly
     this.setOrigin(0.5, 0.5);
 
-    scene.add.existing(this);
+    if (enablePhysics) {
+      scene.add.existing(this);
+    } else {
+      scene.add.existing(this.setStatic(true));
+    }
 
     // Add collision event listener
-    scene.matter.world.on('collisionstart', this.handleCollision, this);
+    scene.matter.world.on('collisionstart', (event) => this.handleCollision(event), this);
+
+    // Call the checkBounds method periodically
+    this.scene.time.addEvent({
+      delay: 1000, // Check every second
+      callback: () => this.checkBounds(), // Use arrow function to preserve context
+      loop: true
+    });
+  }
+
+  enablePhysics() {
+    this.setStatic(false);
+  }
+
+  updatePosition(x, y) {
+    this.setPosition(x, y);
   }
 
   handleCollision(event) {
@@ -225,12 +243,18 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
         (currentIndex + 1) % Object.values(AnimatronicsNames).length;
       const nextName = Object.values(AnimatronicsNames)[nextIndex];
 
-      const newAnimatronic = new Animatronic(scene, nextName, centerX, centerY);
+      const newAnimatronic = new Animatronic(
+        scene,
+        nextName,
+        centerX,
+        centerY,
+        true,
+      );
 
       // Add Smoke
       const smoke = new Smoke(scene, centerX, centerY);
       // Play sound
-      scene.sound.play('merge', { volume: 0.35 }); //set volume to 0.35
+      scene.sound.play('merge', { volume: 0.4 });
       // Add the new animatronic to the scene and the map
       scene.add.existing(newAnimatronic);
       scene.animatronicsSpawner.animatronicsMap.set(nextName, newAnimatronic);
@@ -243,5 +267,20 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
       scene.animatronicsSpawner.animatronicsMap.delete(animatronicA.name);
       scene.animatronicsSpawner.animatronicsMap.delete(animatronicB.name);
     }
+  }
+
+  checkBounds() {
+    if (typeof this.scene !== 'undefined') {
+      const { width, height } = this.scene.sys.game.config;
+      const { x, y } = this;
+
+      if (x < 0 || x > width || y < 0 || y > height) {
+        this.handleOutOfBounds();
+      }
+    }
+  }
+
+  handleOutOfBounds() {
+    this.scene.scene.start('GameOver'); // Ensure correct context
   }
 }
