@@ -14,15 +14,19 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    // new YandexSDK(this);
+    const yandexSDK = new YandexSDK(this);
+
     this.add.image(0, 0, 'background').setOrigin(0, 0);
+
     const scoreManager = new ScoreManager(this);
+
     new Box(
       this,
       this.game.config.width / 2,
       this.game.config.height / 2 + 150,
     );
-    this.animatronicsSpawner = new AnimatronicsSpawner(this, scoreManager);
+
+    this.animatronicsSpawner = new AnimatronicsSpawner(this, scoreManager, yandexSDK);
 
     this.cameras.main.zoom = 1.7;
   }
