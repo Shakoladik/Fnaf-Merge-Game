@@ -1,10 +1,13 @@
 import Phaser from 'phaser';
+
 import AnimatronicsNames from '../utils/AnimatronicsNames';
+
 import Smoke from '../entities/Smoke';
 
 export default class Animatronic extends Phaser.Physics.Matter.Sprite {
   constructor(scene, name, x, y, enablePhysics = false, scoreManager) {
     let colliderPoints = null;
+
     switch (name) {
       case AnimatronicsNames.ENDO:
         colliderPoints = [
@@ -265,6 +268,9 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
       // Add the new animatronic to the scene and the map
       scene.add.existing(newAnimatronic);
       scene.animatronicsSpawner.animatronicsMap.set(nextName, newAnimatronic);
+
+      // Notify the spawner about the merge
+      scene.animatronicsSpawner.handleMerge();
 
       // Destroy the colliding animatronics
       animatronicA.destroy();
