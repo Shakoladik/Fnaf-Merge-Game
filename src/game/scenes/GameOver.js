@@ -6,23 +6,23 @@ export default class GameOver extends Phaser.Scene {
   }
 
   create() {
-    // Create the "Game over" text
-    const gameOverText = this.add
+    this.add.image(0, 0, 'background').setOrigin(0, 0);
+
+    this.add
       .text(
         this.cameras.main.centerX,
-        this.cameras.main.centerY - 50,
-        'Game Over',
-        { fontFamily: 'Arial', fontSize: 48, color: '#000000' },
+        this.cameras.main.centerY - 30,
+        'ИГРА ОКОНЧЕНА',
+        { fontFamily: 'FNAFFont', fontSize: 100, color: '#000000' },
       )
       .setOrigin(0.5);
 
-    // Create the "Click here to restart" text
-    const restartText = this.add
+    this.add
       .text(
         this.cameras.main.centerX,
-        this.cameras.main.centerY + 50,
-        'Click here to restart',
-        { fontFamily: 'Arial', fontSize: 24, color: '#000000' },
+        this.cameras.main.centerY + 60,
+        'Нажмите сюда, чтобы начать заново',
+        { fontFamily: 'FNAFFont', fontSize: 35, color: '#000000' },
       )
       .setOrigin(0.5);
 
