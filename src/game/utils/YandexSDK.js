@@ -92,6 +92,7 @@ export default class YandexSDK {
       width / 2,
       height / 2,
       `Время до начала рекламы: ${this.timeUntilAdv}`,
+      { fontSize: 50 },
     );
     text.setOrigin(0.5, 0.5);
     this.timeUntilAdv -= 1;

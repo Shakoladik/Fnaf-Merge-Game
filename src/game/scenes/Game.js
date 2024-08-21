@@ -4,6 +4,7 @@ import YandexSDK from '../utils/YandexSDK';
 
 import Box from '../entities/Box';
 import AnimatronicsSpawner from '../entities/AnimatronicsSpawner';
+import ScoreManager from '../ui/Score';
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -13,16 +14,15 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    new YandexSDK(this);
-
+    // new YandexSDK(this);
     this.add.image(0, 0, 'background').setOrigin(0, 0);
-
+    const scoreManager = new ScoreManager(this);
     new Box(
       this,
       this.game.config.width / 2,
       this.game.config.height / 2 + 150,
     );
-    this.animatronicsSpawner = new AnimatronicsSpawner(this);
+    this.animatronicsSpawner = new AnimatronicsSpawner(this, scoreManager);
 
     this.cameras.main.zoom = 1.7;
   }
