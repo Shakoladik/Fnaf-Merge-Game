@@ -1,5 +1,3 @@
-import Phaser from 'phaser';
-
 export default class ScoreManager {
   constructor(scene) {
     this.currentScore = 0;
@@ -8,13 +6,11 @@ export default class ScoreManager {
   }
 
   createScore(scene) {
-    const { width, height } = scene.game.config;
-    this.text = scene.add.text(
-      width / 3.75,
-      height / 2.5,
-      `Счёт: ${this.currentScore}`,
-      { fontSize: 30, color: 'black' },
-    );
+    this.text = scene.add.text(430, 250, `Счёт: ${this.currentScore}`, {
+      fontSize: 30,
+      fontFamily: 'FNAFFont',
+      color: 'black',
+    });
   }
 
   updateScore(scene, currentAnimatronicIndex) {
@@ -22,12 +18,10 @@ export default class ScoreManager {
     if (this.text) {
       this.text.destroy();
     }
-    const { width, height } = scene.game.config;
-    this.text = scene.add.text(
-      width / 3.75,
-      height / 2.5,
-      `Счёт: ${this.currentScore}`,
-      { fontSize: 30, color: 'black' },
-    );
+    this.text = scene.add.text(430, 250, `Счёт: ${this.currentScore}`, {
+      fontSize: 30,
+      fontFamily: 'FNAFFont',
+      color: 'black',
+    });
   }
 }
