@@ -38,6 +38,10 @@ export default class YandexSDK {
     });
   }
 
+  savePlayerData(dataToSave) {
+    console.log(dataToSave);
+  }
+
   startTimer() {
     this.scene.input.enable(this.scene); //Enabling inputs and physics
     this.scene.matter.resume();
