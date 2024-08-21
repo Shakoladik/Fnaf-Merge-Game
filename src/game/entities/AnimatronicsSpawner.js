@@ -3,7 +3,8 @@ import AnimatronicsNames from '../utils/AnimatronicsNames';
 import Animatronic from '../entities/Animatronic';
 
 export default class AnimatronicsSpawner {
-  constructor(scene) {
+  constructor(scene, scoreManager) {
+    this.scoreManager = scoreManager;
     this.scene = scene;
     this.boxHeight = 280;
     this.boxWidth = 125;
@@ -149,6 +150,7 @@ export default class AnimatronicsSpawner {
         centerX,
         this.boxHeight,
         false,
+        this.scoreManager,
       );
 
       this.scene.add.existing(animatronic);

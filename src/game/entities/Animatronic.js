@@ -3,9 +3,8 @@ import AnimatronicsNames from '../utils/AnimatronicsNames';
 import Smoke from '../entities/Smoke';
 
 export default class Animatronic extends Phaser.Physics.Matter.Sprite {
-  constructor(scene, name, x, y, enablePhysics = false) {
+  constructor(scene, name, x, y, enablePhysics = false, scoreManager) {
     let colliderPoints = null;
-
     switch (name) {
       case AnimatronicsNames.ENDO:
         colliderPoints = [
@@ -172,6 +171,7 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
 
     this.name = name;
     this.scene = scene; // Store the scene reference
+    this.scoreManager = scoreManager;
 
     // Ensure the sprite is centered correctly
     this.setOrigin(0.5, 0.5);
@@ -183,13 +183,17 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
     }
 
     // Add collision event listener
-    scene.matter.world.on('collisionstart', (event) => this.handleCollision(event), this);
+    scene.matter.world.on(
+      'collisionstart',
+      (event) => this.handleCollision(event),
+      this,
+    );
 
     // Call the checkBounds method periodically
     this.scene.time.addEvent({
       delay: 1000, // Check every second
       callback: () => this.checkBounds(), // Use arrow function to preserve context
-      loop: true
+      loop: true,
     });
   }
 
@@ -249,8 +253,11 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
         centerX,
         centerY,
         true,
+        this.scoreManager,
       );
 
+      // Update score
+      this.scoreManager.updateScore(scene, currentIndex);
       // Add Smoke
       const smoke = new Smoke(scene, centerX, centerY);
       // Play sound
