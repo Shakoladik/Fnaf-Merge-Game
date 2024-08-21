@@ -39,7 +39,10 @@ export default class AnimatronicsSpawner {
     this.isPointerDown = true;
     this.lastPointerPosition = { x: pointer.worldX, y: pointer.worldY };
 
-    if (this.lastSpawnedAnimatronic && this.lastSpawnedAnimatronic.body.isStatic) {
+    if (
+      this.lastSpawnedAnimatronic &&
+      this.lastSpawnedAnimatronic.body.isStatic
+    ) {
       this.isDrawingSpawnLine = true;
       this.spawnLineStartPoint = { x: pointer.worldX, y: this.boxHeight };
       this.updateSpawnLine(pointer);
@@ -55,7 +58,10 @@ export default class AnimatronicsSpawner {
     if (this.isDrawingSpawnLine) {
       this.updateSpawnLine(pointer);
 
-      if (this.lastSpawnedAnimatronic && this.lastSpawnedAnimatronic.body.isStatic) {
+      if (
+        this.lastSpawnedAnimatronic &&
+        this.lastSpawnedAnimatronic.body.isStatic
+      ) {
         const clampedX = this.clampX(pointer.worldX);
         this.lastSpawnedAnimatronic.updatePosition(clampedX, this.boxHeight);
       }
@@ -104,11 +110,17 @@ export default class AnimatronicsSpawner {
       const centerX = this.scene.game.config.width / 2;
       let adjustedX = pointer.worldX;
       if (Math.abs(pointer.worldX - centerX) > this.boxWidth) {
-        adjustedX = centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
+        adjustedX =
+          centerX + Math.sign(pointer.worldX - centerX) * this.boxWidth;
       }
 
       const endY = this.boxHeight + this.spawnLineLength;
-      this.spawnLineGraphics.lineBetween(adjustedX, this.boxHeight, adjustedX, endY);
+      this.spawnLineGraphics.lineBetween(
+        adjustedX,
+        this.boxHeight,
+        adjustedX,
+        endY,
+      );
       this.spawnLineGraphics.strokePath();
     }
   }
@@ -123,9 +135,19 @@ export default class AnimatronicsSpawner {
         AnimatronicsNames.BONNIE,
       ];
 
-      const randomAnimatronicName = possibleAnimatronics[Math.floor(Math.random() * possibleAnimatronics.length)];
+      const randomAnimatronicName =
+        possibleAnimatronics[
+          Math.floor(Math.random() * possibleAnimatronics.length)
+        ];
 
-      const animatronic = new Animatronic(this.scene, randomAnimatronicName, centerX, this.boxHeight, false, this.scoreManager);
+      const animatronic = new Animatronic(
+        this.scene,
+        randomAnimatronicName,
+        centerX,
+        this.boxHeight,
+        false,
+        this.scoreManager,
+      );
 
       this.scene.add.existing(animatronic);
       this.animatronicsMap.set(animatronic.name, animatronic);
@@ -133,7 +155,10 @@ export default class AnimatronicsSpawner {
 
       if (this.isPointerDown && this.lastPointerPosition) {
         this.isDrawingSpawnLine = true;
-        this.spawnLineStartPoint = { x: this.lastPointerPosition.x, y: this.boxHeight };
+        this.spawnLineStartPoint = {
+          x: this.lastPointerPosition.x,
+          y: this.boxHeight,
+        };
         this.updateSpawnLine(this.lastPointerPosition);
 
         const clampedX = this.clampX(this.lastPointerPosition.x);
@@ -165,7 +190,7 @@ export default class AnimatronicsSpawner {
 
   getCurrentGameState() {
     const animatronics = [];
-    this.scene.children.each(child => {
+    this.scene.children.each((child) => {
       if (child instanceof Animatronic && child.y !== this.boxHeight) {
         animatronics.push({
           name: child.name,

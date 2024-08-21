@@ -26,7 +26,11 @@ export default class Game extends Phaser.Scene {
       this.game.config.height / 2 + 150,
     );
 
-    this.animatronicsSpawner = new AnimatronicsSpawner(this, scoreManager, yandexSDK);
+    this.animatronicsSpawner = new AnimatronicsSpawner(
+      this,
+      scoreManager,
+      yandexSDK,
+    );
 
     this.cameras.main.zoom = 1.7;
   }
