@@ -1,4 +1,5 @@
 import AnimatronicsNames from '../utils/AnimatronicsNames';
+
 import Animatronic from '../entities/Animatronic';
 
 export default class AnimatronicsSpawner {
@@ -6,13 +7,12 @@ export default class AnimatronicsSpawner {
     this.scene = scene;
     this.scoreManager = scoreManager;
     this.yandexSDK = yandexSDK;
-    this.saveDelay = 1 * 1000; // Convert seconds to milliseconds
+    this.saveDelay = 1.5 * 1000; // Convert seconds to milliseconds
 
     this.boxHeight = 280;
     this.boxWidth = 125;
 
     this.animatronicsMap = new Map();
-    this.animatronicsArray = [];
 
     this.isDrawingSpawnLine = false;
     this.spawnLineStartPoint = null;
@@ -129,12 +129,6 @@ export default class AnimatronicsSpawner {
 
       this.scene.add.existing(animatronic);
       this.animatronicsMap.set(animatronic.name, animatronic);
-      this.animatronicsArray.push({
-        name: animatronic.name,
-        x: animatronic.x,
-        y: animatronic.y,
-        rotation: animatronic.rotation,
-      });
       this.lastSpawnedAnimatronic = animatronic;
 
       if (this.isPointerDown && this.lastPointerPosition) {
@@ -155,23 +149,7 @@ export default class AnimatronicsSpawner {
     return Math.max(minX, Math.min(x, maxX));
   }
 
-  removeAnimatronic(animatronic) {
-    const index = this.animatronicsArray.findIndex(a => a.name === animatronic.name);
-    if (index !== -1) {
-      this.animatronicsArray.splice(index, 1);
-    }
-  }
-
-  handleMerge(animatronicA, animatronicB, newAnimatronic) {
-    this.removeAnimatronic(animatronicA);
-    this.removeAnimatronic(animatronicB);
-    this.animatronicsArray.push({
-      name: newAnimatronic.name,
-      x: newAnimatronic.x,
-      y: newAnimatronic.y,
-      rotation: newAnimatronic.rotation,
-    });
-
+  handleMerge() {
     this.scheduleSaveData();
   }
 
@@ -182,9 +160,7 @@ export default class AnimatronicsSpawner {
   saveData() {
     const saveData = this.getCurrentGameState();
 
-    if (typeof this.yandexSDK !== 'undefined') {
-      this.yandexSDK.savePlayerData(saveData);
-    }
+    this.yandexSDK.savePlayerData(saveData);
   }
 
   getCurrentGameState() {
