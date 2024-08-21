@@ -39,7 +39,14 @@ export default class YandexSDK {
   }
 
   savePlayerData(dataToSave) {
-    console.log(dataToSave);
+    this.ysdk.getPlayer().then((player) => {
+      player
+        .setData(dataToSave, true)
+        .then(() => {
+          console.log('[Player data is saved!]');
+        })
+        .catch();
+    });
   }
 
   startTimer() {
