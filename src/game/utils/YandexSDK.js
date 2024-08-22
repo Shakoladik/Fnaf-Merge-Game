@@ -1,5 +1,3 @@
-import Phaser from 'phaser';
-
 export default class YandexSDK {
   static TIME_BETWEEN_ADS = 62000; // in milliseconds
   static TIME_UNTIL_AD_COUNTDOWN = 2;
@@ -8,8 +6,6 @@ export default class YandexSDK {
     this.scene = scene;
     this.timeUntilAdv = YandexSDK.TIME_UNTIL_AD_COUNTDOWN;
     this.ysdk = null;
-
-    this.initializeYandexSDK();
   }
 
   async initializeYandexSDK() {
@@ -47,6 +43,15 @@ export default class YandexSDK {
         })
         .catch();
     });
+  }
+
+  async getPlayerData() {
+    try {
+      const player = await this.ysdk.getPlayer();
+      this.savedPlayerDataOnYandex = await player.getData();
+    } catch (error) {
+      console.error('Error getting player data:', error);
+    }
   }
 
   startTimer() {
