@@ -16,6 +16,9 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+    this.yandexSDK.scene = this;
+    this.yandexSDK.showFullscreenAd();
+
     this.add.image(0, 0, 'background').setOrigin(0, 0);
 
     const scoreManager = new ScoreManager(this);
