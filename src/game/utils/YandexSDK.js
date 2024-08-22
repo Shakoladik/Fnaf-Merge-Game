@@ -15,8 +15,6 @@ export default class YandexSDK {
 
       this.ysdk.features.LoadingAPI.ready();
       console.log('Game is ready to play');
-
-      this.showFullscreenAd();
     } catch (error) {
       console.error('Error initializing Yandex SDK:', error);
     }
