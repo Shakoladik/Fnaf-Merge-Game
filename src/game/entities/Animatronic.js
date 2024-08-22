@@ -269,9 +269,6 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
       scene.add.existing(newAnimatronic);
       scene.animatronicsSpawner.animatronicsMap.set(nextName, newAnimatronic);
 
-      // Notify the spawner about the merge
-      scene.animatronicsSpawner.handleMerge();
-
       // Destroy the colliding animatronics
       animatronicA.destroy();
       animatronicB.destroy();
