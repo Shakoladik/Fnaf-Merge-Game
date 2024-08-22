@@ -7,7 +7,6 @@ export default class AnimatronicsSpawner {
     this.scene = scene;
     this.scoreManager = scoreManager;
     this.yandexSDK = yandexSDK;
-    this.saveDelay = 1.5 * 1000; // Convert seconds to milliseconds
 
     this.boxHeight = 280;
     this.boxWidth = 125;
@@ -23,6 +22,11 @@ export default class AnimatronicsSpawner {
     this.isPointerDown = false;
     this.lastPointerPosition = null;
 
+    console.log('[SAVED PLAYER DATA]');
+    console.log(yandexSDK.savedPlayerDataOnYandex);
+
+    // TODO: Implement loading player data to the game
+
     this.scene.input.on('pointerdown', this.handlePointerDown, this);
     this.scene.input.on('pointerup', this.handlePointerUp, this);
     this.scene.input.on('pointermove', this.handlePointerMove, this);
@@ -30,6 +34,18 @@ export default class AnimatronicsSpawner {
     this.scene.time.addEvent({
       delay: 10,
       callback: this.checkAndSpawnAnimatronic,
+      callbackScope: this,
+      loop: true,
+    });
+
+    this.saveInterval = 5000; // In milliseconds
+    this.startSaveTimer();
+  }
+
+  startSaveTimer() {
+    this.scene.time.addEvent({
+      delay: this.saveInterval,
+      callback: this.saveData,
       callbackScope: this,
       loop: true,
     });
@@ -77,7 +93,6 @@ export default class AnimatronicsSpawner {
 
       if (this.lastSpawnedAnimatronic) {
         this.lastSpawnedAnimatronic.enablePhysics();
-        this.scheduleSaveData();
       }
     }
   }
@@ -174,17 +189,8 @@ export default class AnimatronicsSpawner {
     return Math.max(minX, Math.min(x, maxX));
   }
 
-  handleMerge() {
-    this.scheduleSaveData();
-  }
-
-  scheduleSaveData() {
-    this.scene.time.delayedCall(this.saveDelay, this.saveData, [], this);
-  }
-
   saveData() {
     const saveData = this.getCurrentGameState();
-
     this.yandexSDK.savePlayerData(saveData);
   }
 
