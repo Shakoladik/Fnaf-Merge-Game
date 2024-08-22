@@ -38,13 +38,8 @@ export default class AnimatronicsSpawner {
       loop: true,
     });
 
-    this.saveInterval = 5000; // In milliseconds
-    this.startSaveTimer();
-  }
-
-  startSaveTimer() {
     this.scene.time.addEvent({
-      delay: this.saveInterval,
+      delay: 5 * 1000,
       callback: this.saveData,
       callbackScope: this,
       loop: true,
