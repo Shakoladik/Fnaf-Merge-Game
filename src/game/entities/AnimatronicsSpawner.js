@@ -25,7 +25,7 @@ export default class AnimatronicsSpawner {
     console.log('[SAVED PLAYER DATA]');
     console.log(yandexSDK.savedPlayerDataOnYandex);
 
-    // TODO: Implement loading player data to the game
+    this.loadPlayerData(yandexSDK.savedPlayerDataOnYandex);
 
     this.scene.input.on('pointerdown', this.handlePointerDown, this);
     this.scene.input.on('pointerup', this.handlePointerUp, this);
@@ -211,5 +211,28 @@ export default class AnimatronicsSpawner {
       score: this.scoreManager.currentScore,
       animatronics: animatronics,
     };
+  }
+
+  loadPlayerData(savedData) {
+    if (savedData && savedData.animatronics) {
+      savedData.animatronics.forEach((animatronicData) => {
+        const animatronic = new Animatronic(
+          this.scene,
+          animatronicData.name,
+          animatronicData.x,
+          animatronicData.y,
+          true,
+          this.scoreManager,
+        );
+
+        animatronic.setRotation(animatronicData.rotation);
+        this.scene.add.existing(animatronic);
+        this.animatronicsMap.set(animatronic.name, animatronic);
+      });
+    }
+
+    if (savedData && savedData.score !== undefined) {
+      this.scoreManager.currentScore = savedData.score;
+    }
   }
 }
