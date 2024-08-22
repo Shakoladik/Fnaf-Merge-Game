@@ -2,11 +2,13 @@ export default class ScoreManager {
   constructor(scene) {
     this.currentScore = 0;
     this.text = null;
+    this.hasSlidIn = false;
     this.createScore(scene);
   }
 
   createScore(scene) {
-    this.text = scene.add.text(430, 250, `Счёт: ${this.currentScore}`, {
+    // Initialize the text off-screen
+    this.text = scene.add.text(430, -50, `Счёт: ${this.currentScore}`, {
       fontSize: 30,
       fontFamily: 'FNAFFont',
       color: 'black',
@@ -15,13 +17,32 @@ export default class ScoreManager {
 
   updateScore(scene, currentAnimatronicIndex) {
     this.currentScore += 5 * 2 ** currentAnimatronicIndex;
+
     if (this.text) {
       this.text.destroy();
     }
-    this.text = scene.add.text(430, 250, `Счёт: ${this.currentScore}`, {
+
+    // Create the new text off-screen
+    this.text = scene.add.text(430, -50, `Счёт: ${this.currentScore}`, {
       fontSize: 30,
       fontFamily: 'FNAFFont',
       color: 'black',
     });
+
+    if (!this.hasSlidIn) {
+      // Slide the text into position
+      scene.tweens.add({
+        targets: this.text,
+        y: 250,
+        duration: 300, // Duration of the slide-in animation in milliseconds
+        ease: 'Power2',
+        onComplete: () => {
+          this.hasSlidIn = true;
+        },
+      });
+    } else {
+      // If the text has already slid in, just set its position directly
+      this.text.setPosition(430, 250);
+    }
   }
 }
