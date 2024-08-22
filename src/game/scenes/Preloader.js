@@ -1,10 +1,9 @@
 import Phaser from 'phaser';
 
 import AnimatronicsNames from '../utils/AnimatronicsNames';
+import YandexSDK from '../utils/YandexSDK';
 
 export default class Preloader extends Phaser.Scene {
-  // Preloader is basically a loading screen for the game
-
   constructor() {
     super('Preloader');
   }
@@ -38,8 +37,8 @@ export default class Preloader extends Phaser.Scene {
     });
   }
 
-  preload() {
-    //  Load the assets for the game - Replace with your own assets
+  async preload() {
+    // Load the assets for the game - Replace with your own assets
     this.load.setPath('assets');
 
     this.load.image('background', 'images/backgrounds/background.png');
@@ -98,13 +97,17 @@ export default class Preloader extends Phaser.Scene {
     this.load.image('smoke', 'images/particles/smoke.png');
 
     this.load.audio('merge', 'audio/merge_sound.wav');
+
+    // Initialize YandexSDK
+    const yandexSDK = new YandexSDK(this);
+    await yandexSDK.initializeYandexSDK();
+    await yandexSDK.getPlayerData();
+
+    // Pass the YandexSDK instance to the Game scene
+    this.scene.start('Game', { yandexSDK });
   }
 
   create() {
-    //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
-    //  For example, you can define global animations here, so we can use them in other scenes.
-
-    //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.scene.start('Game');
+    // This method is empty because the scene transition happens in preload
   }
 }

@@ -1,5 +1,3 @@
-import Phaser from 'phaser';
-
 export default class YandexSDK {
   static TIME_BETWEEN_ADS = 62000; // in milliseconds
   static TIME_UNTIL_AD_COUNTDOWN = 2;
@@ -8,8 +6,6 @@ export default class YandexSDK {
     this.scene = scene;
     this.timeUntilAdv = YandexSDK.TIME_UNTIL_AD_COUNTDOWN;
     this.ysdk = null;
-
-    this.initializeYandexSDK();
   }
 
   async initializeYandexSDK() {
@@ -19,8 +15,6 @@ export default class YandexSDK {
 
       this.ysdk.features.LoadingAPI.ready();
       console.log('Game is ready to play');
-
-      this.showFullscreenAd();
     } catch (error) {
       console.error('Error initializing Yandex SDK:', error);
     }
@@ -36,6 +30,26 @@ export default class YandexSDK {
         },
       },
     });
+  }
+
+  savePlayerData(dataToSave) {
+    this.ysdk.getPlayer().then((player) => {
+      player
+        .setData(dataToSave, true)
+        .then(() => {
+          console.log('[Player data is saved!]');
+        })
+        .catch();
+    });
+  }
+
+  async getPlayerData() {
+    try {
+      const player = await this.ysdk.getPlayer();
+      this.savedPlayerDataOnYandex = await player.getData();
+    } catch (error) {
+      console.error('Error getting player data:', error);
+    }
   }
 
   startTimer() {
@@ -92,7 +106,7 @@ export default class YandexSDK {
       width / 2,
       height / 2,
       `Время до начала рекламы: ${this.timeUntilAdv}`,
-      { fontSize: 50 },
+      { fontSize: 50, fontFamily: 'FNAFFont' },
     );
     text.setOrigin(0.5, 0.5);
     this.timeUntilAdv -= 1;

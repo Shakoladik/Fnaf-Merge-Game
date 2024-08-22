@@ -3,12 +3,16 @@ import AnimatronicsNames from '../utils/AnimatronicsNames';
 import Animatronic from '../entities/Animatronic';
 
 export default class AnimatronicsSpawner {
-  constructor(scene, scoreManager) {
-    this.scoreManager = scoreManager;
+  constructor(scene, scoreManager, yandexSDK) {
     this.scene = scene;
+    this.scoreManager = scoreManager;
+    this.yandexSDK = yandexSDK;
+
     this.boxHeight = 280;
     this.boxWidth = 125;
+
     this.animatronicsMap = new Map();
+
     this.isDrawingSpawnLine = false;
     this.spawnLineStartPoint = null;
     this.spawnLineGraphics = this.scene.add.graphics();
@@ -18,15 +22,25 @@ export default class AnimatronicsSpawner {
     this.isPointerDown = false;
     this.lastPointerPosition = null;
 
-    // Add mouse/touch event listeners
+    console.log('[SAVED PLAYER DATA]');
+    console.log(yandexSDK.savedPlayerDataOnYandex);
+
+    this.loadPlayerData(yandexSDK.savedPlayerDataOnYandex);
+
     this.scene.input.on('pointerdown', this.handlePointerDown, this);
     this.scene.input.on('pointerup', this.handlePointerUp, this);
     this.scene.input.on('pointermove', this.handlePointerMove, this);
 
-    // Set up a timer to check for spawning conditions periodically
     this.scene.time.addEvent({
       delay: 10,
       callback: this.checkAndSpawnAnimatronic,
+      callbackScope: this,
+      loop: true,
+    });
+
+    this.scene.time.addEvent({
+      delay: 5 * 1000,
+      callback: this.saveData,
       callbackScope: this,
       loop: true,
     });
@@ -44,7 +58,6 @@ export default class AnimatronicsSpawner {
       this.spawnLineStartPoint = { x: pointer.worldX, y: this.boxHeight };
       this.updateSpawnLine(pointer);
 
-      // Update the animatronic's position to the starting point of the spawn line
       const clampedX = this.clampX(pointer.worldX);
       this.lastSpawnedAnimatronic.updatePosition(clampedX, this.boxHeight);
     }
@@ -56,7 +69,6 @@ export default class AnimatronicsSpawner {
     if (this.isDrawingSpawnLine) {
       this.updateSpawnLine(pointer);
 
-      // Move the last spawned animatronic if it has no physics
       if (
         this.lastSpawnedAnimatronic &&
         this.lastSpawnedAnimatronic.body.isStatic
@@ -74,7 +86,6 @@ export default class AnimatronicsSpawner {
       this.isDrawingSpawnLine = false;
       this.spawnLineGraphics.clear();
 
-      // Enable physics for the last spawned animatronic
       if (this.lastSpawnedAnimatronic) {
         this.lastSpawnedAnimatronic.enablePhysics();
       }
@@ -89,13 +100,10 @@ export default class AnimatronicsSpawner {
     let animatronicHeight;
     let animatronicY;
 
-    // The previous animatronic may be merged with another one and destroyed
-    // In that case we cannot get its height and y coordinate, but we don't actually need them
     try {
       animatronicHeight = this.lastSpawnedAnimatronic.height;
       animatronicY = this.lastSpawnedAnimatronic.y;
     } catch {
-      // In that case we simply say that we can spawn the next animatronic
       return true;
     }
 
@@ -131,14 +139,12 @@ export default class AnimatronicsSpawner {
     if (this.canSpawnNewAnimatronic()) {
       const centerX = this.scene.game.config.width / 2;
 
-      // Array of possible animatronic names
       const possibleAnimatronics = [
         AnimatronicsNames.ENDO,
         AnimatronicsNames.BB,
         AnimatronicsNames.BONNIE,
       ];
 
-      // Select a random animatronic name
       const randomAnimatronicName =
         possibleAnimatronics[
           Math.floor(Math.random() * possibleAnimatronics.length)
@@ -157,7 +163,6 @@ export default class AnimatronicsSpawner {
       this.animatronicsMap.set(animatronic.name, animatronic);
       this.lastSpawnedAnimatronic = animatronic;
 
-      // If the pointer is still down, start drawing the spawn line
       if (this.isPointerDown && this.lastPointerPosition) {
         this.isDrawingSpawnLine = true;
         this.spawnLineStartPoint = {
@@ -166,7 +171,6 @@ export default class AnimatronicsSpawner {
         };
         this.updateSpawnLine(this.lastPointerPosition);
 
-        // Update the animatronic's position to the starting point of the spawn line
         const clampedX = this.clampX(this.lastPointerPosition.x);
         this.lastSpawnedAnimatronic.updatePosition(clampedX, this.boxHeight);
       }
@@ -178,5 +182,52 @@ export default class AnimatronicsSpawner {
     const minX = centerX - this.boxWidth;
     const maxX = centerX + this.boxWidth;
     return Math.max(minX, Math.min(x, maxX));
+  }
+
+  saveData() {
+    const saveData = this.getCurrentGameState();
+    this.yandexSDK.savePlayerData(saveData);
+  }
+
+  getCurrentGameState() {
+    const animatronics = [];
+    this.scene.children.each((child) => {
+      if (child instanceof Animatronic && child.y !== this.boxHeight) {
+        animatronics.push({
+          name: child.name,
+          x: child.x,
+          y: child.y,
+          rotation: child.rotation,
+        });
+      }
+    });
+
+    return {
+      score: this.scoreManager.currentScore,
+      animatronics: animatronics,
+    };
+  }
+
+  loadPlayerData(savedData) {
+    if (savedData && savedData.animatronics) {
+      savedData.animatronics.forEach((animatronicData) => {
+        const animatronic = new Animatronic(
+          this.scene,
+          animatronicData.name,
+          animatronicData.x,
+          animatronicData.y,
+          true,
+          this.scoreManager,
+        );
+
+        animatronic.setRotation(animatronicData.rotation);
+        this.scene.add.existing(animatronic);
+        this.animatronicsMap.set(animatronic.name, animatronic);
+      });
+    }
+
+    if (savedData && savedData.score !== undefined) {
+      this.scoreManager.currentScore = savedData.score;
+    }
   }
 }
