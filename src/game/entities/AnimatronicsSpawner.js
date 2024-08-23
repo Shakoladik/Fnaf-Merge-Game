@@ -3,10 +3,11 @@ import AnimatronicsNames from '../utils/AnimatronicsNames';
 import Animatronic from '../entities/Animatronic';
 
 export default class AnimatronicsSpawner {
-  constructor(scene, scoreManager, yandexSDK) {
+  constructor(scene, scoreManager, yandexSDK, localizationManager) {
     this.scene = scene;
     this.scoreManager = scoreManager;
     this.yandexSDK = yandexSDK;
+    this.localizationManager = localizationManager;
 
     this.boxHeight = 280;
     this.boxWidth = 125;
@@ -157,6 +158,7 @@ export default class AnimatronicsSpawner {
         this.boxHeight,
         false,
         this.scoreManager,
+        this.localizationManager,
       );
 
       this.scene.add.existing(animatronic);
@@ -218,6 +220,7 @@ export default class AnimatronicsSpawner {
           animatronicData.y,
           true,
           this.scoreManager,
+          this.localizationManager,
         );
 
         animatronic.setRotation(animatronicData.rotation);

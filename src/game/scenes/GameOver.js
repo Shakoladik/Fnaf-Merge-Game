@@ -5,6 +5,10 @@ export default class GameOver extends Phaser.Scene {
     super({ key: 'GameOver' });
   }
 
+  init(data) {
+    this.localizationManager = data.localizationManager;
+  }
+
   create() {
     this.add.image(0, 0, 'background').setOrigin(0, 0);
 
@@ -12,7 +16,7 @@ export default class GameOver extends Phaser.Scene {
       .text(
         this.cameras.main.centerX,
         this.cameras.main.centerY - 30,
-        'ИГРА ОКОНЧЕНА',
+        this.localizationManager.getText('gameOverText1'),
         { fontFamily: 'FNAFFont', fontSize: 100, color: '#000000' },
       )
       .setOrigin(0.5);
@@ -21,7 +25,7 @@ export default class GameOver extends Phaser.Scene {
       .text(
         this.cameras.main.centerX,
         this.cameras.main.centerY + 60,
-        'Нажмите сюда, чтобы начать заново',
+        this.localizationManager.getText('gameOverText2'),
         { fontFamily: 'FNAFFont', fontSize: 35, color: '#000000' },
       )
       .setOrigin(0.5);

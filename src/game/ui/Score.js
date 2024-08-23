@@ -1,18 +1,24 @@
 export default class ScoreManager {
-  constructor(scene) {
+  constructor(scene, localizationManager) {
     this.currentScore = 0;
     this.text = null;
     this.hasSlidIn = false;
+    this.localizationManager = localizationManager;
     this.createScore(scene);
   }
 
   createScore(scene) {
     // Initialize the text off-screen
-    this.text = scene.add.text(430, -50, `Счёт: ${this.currentScore}`, {
-      fontSize: 30,
-      fontFamily: 'FNAFFont',
-      color: 'black',
-    });
+    this.text = scene.add.text(
+      430,
+      -50,
+      `${this.localizationManager.getText('scoreText')}: ${this.currentScore}`,
+      {
+        fontSize: 30,
+        fontFamily: 'FNAFFont',
+        color: 'black',
+      },
+    );
   }
 
   updateScore(scene, currentAnimatronicIndex) {
@@ -23,11 +29,16 @@ export default class ScoreManager {
     }
 
     // Create the new text off-screen
-    this.text = scene.add.text(430, -50, `Счёт: ${this.currentScore}`, {
-      fontSize: 30,
-      fontFamily: 'FNAFFont',
-      color: 'black',
-    });
+    this.text = scene.add.text(
+      430,
+      -50,
+      `${this.localizationManager.getText('scoreText')}: ${this.currentScore}`,
+      {
+        fontSize: 30,
+        fontFamily: 'FNAFFont',
+        color: 'black',
+      },
+    );
 
     if (!this.hasSlidIn) {
       // Slide the text into position

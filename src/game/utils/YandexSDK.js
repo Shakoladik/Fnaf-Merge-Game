@@ -6,6 +6,7 @@ export default class YandexSDK {
     this.scene = scene;
     this.timeUntilAdv = YandexSDK.TIME_UNTIL_AD_COUNTDOWN;
     this.ysdk = null;
+    this.localizationManager = null;
   }
 
   async initializeYandexSDK() {
@@ -105,7 +106,7 @@ export default class YandexSDK {
     const text = this.scene.add.text(
       width / 2,
       height / 2,
-      `Время до начала рекламы: ${this.timeUntilAdv}`,
+      `${this.localizationManager.getText('advText')}: ${this.timeUntilAdv}`,
       { fontSize: 50, fontFamily: 'FNAFFont' },
     );
     text.setOrigin(0.5, 0.5);
