@@ -5,7 +5,15 @@ import AnimatronicsNames from '../utils/AnimatronicsNames';
 import Smoke from '../entities/Smoke';
 
 export default class Animatronic extends Phaser.Physics.Matter.Sprite {
-  constructor(scene, name, x, y, enablePhysics = false, scoreManager) {
+  constructor(
+    scene,
+    name,
+    x,
+    y,
+    enablePhysics = false,
+    scoreManager,
+    localizationManager,
+  ) {
     let colliderPoints = null;
 
     switch (name) {
@@ -175,6 +183,7 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
     this.name = name;
     this.scene = scene; // Store the scene reference
     this.scoreManager = scoreManager;
+    this.localizationManager = localizationManager;
 
     // Ensure the sprite is centered correctly
     this.setOrigin(0.5, 0.5);
@@ -257,6 +266,7 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
         centerY,
         true,
         this.scoreManager,
+        this.localizationManager,
       );
 
       // Update score
@@ -291,6 +301,7 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
   }
 
   handleOutOfBounds() {
-    this.scene.scene.start('GameOver'); // Ensure correct context
+    const localizationManager = this.localizationManager;
+    this.scene.scene.start('GameOver', { localizationManager }); // Ensure correct context
   }
 }
