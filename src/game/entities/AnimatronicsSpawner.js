@@ -159,6 +159,7 @@ export default class AnimatronicsSpawner {
         false,
         this.scoreManager,
         this.localizationManager,
+        this.yandexSDK,
       );
 
       this.scene.add.existing(animatronic);
@@ -221,6 +222,7 @@ export default class AnimatronicsSpawner {
           true,
           this.scoreManager,
           this.localizationManager,
+          this.yandexSDK,
         );
 
         animatronic.setRotation(animatronicData.rotation);
