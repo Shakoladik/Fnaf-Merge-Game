@@ -13,6 +13,7 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
     enablePhysics = false,
     scoreManager,
     localizationManager,
+    yandexSDK,
   ) {
     let colliderPoints = null;
 
@@ -181,9 +182,10 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
     });
 
     this.name = name;
-    this.scene = scene; // Store the scene reference
+    this.scene = scene;
     this.scoreManager = scoreManager;
     this.localizationManager = localizationManager;
+    this.yandexSDK = yandexSDK;
 
     // Ensure the sprite is centered correctly
     this.setOrigin(0.5, 0.5);
@@ -267,6 +269,7 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
         true,
         this.scoreManager,
         this.localizationManager,
+        this.yandexSDK,
       );
 
       // Update score
@@ -302,6 +305,7 @@ export default class Animatronic extends Phaser.Physics.Matter.Sprite {
 
   handleOutOfBounds() {
     const localizationManager = this.localizationManager;
+    this.yandexSDK.savePlayerData({});
     this.scene.scene.start('GameOver', { localizationManager }); // Ensure correct context
   }
 }
