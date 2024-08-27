@@ -40,7 +40,7 @@ export default class AnimatronicsSpawner {
     });
 
     this.scene.time.addEvent({
-      delay: 5 * 1000,
+      delay: 3 * 1000,
       callback: this.saveData,
       callbackScope: this,
       loop: true,
