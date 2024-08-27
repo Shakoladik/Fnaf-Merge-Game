@@ -33,7 +33,7 @@ export default class GameOver extends Phaser.Scene {
     // Make the entire scene interactive
     this.input.on('pointerdown', () => {
       // Restart the game or go back to the main game scene
-      this.scene.start('Game');
+      this.scene.start('Preloader');
     });
   }
 }
