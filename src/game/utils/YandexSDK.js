@@ -38,7 +38,8 @@ export default class YandexSDK {
       player
         .setData(dataToSave, true)
         .then(() => {
-          console.log('[Player data is saved!]');
+          console.log('[PLAYER DATA IS SAVED]');
+          console.log(dataToSave);
         })
         .catch();
     });
