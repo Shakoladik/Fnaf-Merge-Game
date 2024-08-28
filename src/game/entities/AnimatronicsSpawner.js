@@ -40,7 +40,7 @@ export default class AnimatronicsSpawner {
     });
 
     this.scene.time.addEvent({
-      delay: 5 * 1000,
+      delay: 3 * 1000,
       callback: this.saveData,
       callbackScope: this,
       loop: true,
@@ -159,6 +159,7 @@ export default class AnimatronicsSpawner {
         false,
         this.scoreManager,
         this.localizationManager,
+        this.yandexSDK,
       );
 
       this.scene.add.existing(animatronic);
@@ -221,6 +222,7 @@ export default class AnimatronicsSpawner {
           true,
           this.scoreManager,
           this.localizationManager,
+          this.yandexSDK,
         );
 
         animatronic.setRotation(animatronicData.rotation);
