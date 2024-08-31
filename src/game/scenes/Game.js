@@ -42,5 +42,6 @@ export default class Game extends Phaser.Scene {
     );
 
     this.cameras.main.zoom = 1.7;
+    this.yandexSDK.initGRA();
   }
 }
