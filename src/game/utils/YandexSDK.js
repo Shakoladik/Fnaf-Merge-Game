@@ -13,9 +13,6 @@ export default class YandexSDK {
     try {
       this.ysdk = await YaGames.init();
       console.log('Yandex SDK initialized');
-
-      this.ysdk.features.LoadingAPI.ready();
-      console.log('Game is ready to play');
     } catch (error) {
       console.error('Error initializing Yandex SDK:', error);
     }
@@ -128,5 +125,10 @@ export default class YandexSDK {
       callback: this.updateCountdownText,
       callbackScope: this,
     });
+  }
+
+  initGRA() {
+    this.ysdk.features.LoadingAPI.ready();
+    console.log('Game is ready to play');
   }
 }
