@@ -19,6 +19,8 @@ export default class YandexSDK {
   }
 
   showFullscreenAd() {
+    this.scene.input.disable(this.scene); //Disabling inputs and physics
+    this.scene.matter.pause();
     this.ysdk.adv.showFullscreenAdv({
       callbacks: {
         onClose: () => this.startTimer(),
@@ -61,11 +63,11 @@ export default class YandexSDK {
       callbackScope: this,
     });
 
-    this.scene.time.addEvent({
-      delay: YandexSDK.TIME_BETWEEN_ADS - 2000,
-      callback: this.startAdCountdown,
-      callbackScope: this,
-    });
+    // this.scene.time.addEvent({
+    //   delay: YandexSDK.TIME_BETWEEN_ADS - 2000,
+    //   callback: this.startAdCountdown,
+    //   callbackScope: this,
+    // });
   }
 
   startAdCountdown() {
